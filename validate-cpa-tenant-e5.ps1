@@ -274,7 +274,7 @@ function Test-SubscriptionCostsAndCredits {
             # Other common SKUs
             "18181a46-0d4e-45cd-891e-60aabd171b4e" = @{Name = "Office 365 E1"; Cost = 10.00; Type = "Paid" }
             "6fd2c87f-b296-42f0-b197-1e91e994b900" = @{Name = "Office 365 E3"; Cost = 23.00; Type = "Paid" }
-            "c7df2760-2c81-4ef7-b578-5b5392b571df" = @{Name = "Microsoft 365 E3"; Cost = 36.00; Type = "Paid" }
+            "05e9a617-0261-4cee-bb44-138d3ef5d965" = @{Name = "Microsoft 365 E3"; Cost = 36.00; Type = "Paid" }
             "4b590615-0888-425a-a965-b3bf7789848d" = @{Name = "Microsoft 365 Business Premium"; Cost = 22.00; Type = "Paid" }
             "cbdc14ab-d96c-4c30-b9f4-6ada7cdc1d46" = @{Name = "Microsoft 365 Business Basic"; Cost = 6.00; Type = "Paid" }
             
