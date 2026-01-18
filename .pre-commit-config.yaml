@@ -1,0 +1,77 @@
+# Pre-commit hooks for ComplianceHub (PowerShell Compliance Automation)
+# Install: pip install pre-commit
+# Setup: pre-commit install
+
+repos:
+  # General file checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        args: [--unsafe]  # Allow custom YAML tags
+        exclude: \.github/workflows/.*\.yml$
+      - id: check-json
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
+      - id: check-added-large-files
+        args: [--maxkb=500]
+      - id: check-case-conflict
+      - id: detect-private-key
+      - id: check-merge-conflict
+      - id: check-symlinks
+      - id: mixed-line-ending
+        args: [--fix=lf]
+
+  # Secret scanning - critical for compliance repos
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+      - id: detect-secrets
+        args: ['--baseline', '.secrets.baseline']
+        exclude: \.example$
+
+  # YAML linting (important for policy templates)
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.35.1
+    hooks:
+      - id: yamllint
+        args: [-d, relaxed, --no-warnings]
+        files: \.(yaml|yml)$
+        exclude: \.github/workflows/
+
+  # Markdown linting
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.42.0
+    hooks:
+      - id: markdownlint
+        args: [--fix, --disable, MD013, MD033, MD041]
+
+  # PowerShell Script Analyzer
+  - repo: local
+    hooks:
+      - id: psscriptanalyzer
+        name: PSScriptAnalyzer
+        entry: powershell.exe -NoProfile -Command "Get-ChildItem -Recurse -Include *.ps1,*.psm1 | ForEach-Object { $results = Invoke-ScriptAnalyzer -Path $_.FullName -Severity Warning,Error; if ($results) { $results | Format-Table -AutoSize; exit 1 } }"
+        language: system
+        types: [powershell]
+        pass_filenames: false
+        verbose: true
+
+      - id: powershell-syntax
+        name: PowerShell Syntax Check
+        entry: powershell.exe -NoProfile -Command "Get-ChildItem -Recurse -Include *.ps1,*.psm1 | ForEach-Object { $null = [System.Management.Automation.Language.Parser]::ParseFile($_.FullName, [ref]$null, [ref]$errors); if ($errors) { Write-Error \"$($_.Name): $errors\"; exit 1 } }"
+        language: system
+        types: [powershell]
+        pass_filenames: false
+
+  # Shell script checks (if any bash scripts exist)
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.10.0.1
+    hooks:
+      - id: shellcheck
+        args: [--severity=warning]
+
+# Configuration
+default_install_hook_types: [pre-commit, pre-push]
+fail_fast: false

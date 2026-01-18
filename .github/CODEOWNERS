@@ -1,0 +1,24 @@
+# CODEOWNERS for compliance-governance-test (ComplianceHub)
+
+# These owners will be requested for review on all PRs
+
+# Default owners
+
+* @Heyson315
+
+# PowerShell scripts
+
+*.ps1 @Heyson315
+
+# Policy templates
+
+/docs/policies/ @Heyson315
+
+# CI/CD
+
+/.github/ @Heyson315
+
+# Security-sensitive
+
+SECURITY.md @Heyson315
+COMPLIANCE-MAPPING.md @Heyson315
